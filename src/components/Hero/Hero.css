@@ -1,0 +1,444 @@
+/* Hero page – desktop-first, RTL */
+.hero-page {
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ---- Header ---- */
+.hero-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+
+.hero-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hero-header__logo-icon {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.hero-header__logo-icon--placeholder {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 6px;
+}
+
+.hero-header__brand-name {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #1e293b;
+}
+
+.hero-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.hero-header__link {
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: #334155;
+  text-decoration: none;
+}
+
+.hero-header__link:hover {
+  color: #8b5cf6;
+}
+
+.hero-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hero-header__icon-btn {
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.hero-header__icon-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.hero-header__bell-icon {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0 auto;
+  background-color: #64748b;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9'/%3E%3Cpath d='M13.73 21a2 2 0 0 1-3.46 0'/%3E%3C/svg%3E") center/contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9'/%3E%3Cpath d='M13.73 21a2 2 0 0 1-3.46 0'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}
+
+.hero-header__badge {
+  position: absolute;
+  top: 0.25rem;
+  inset-inline-end: 0.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #ef4444;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.hero-header__login {
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: #1e293b;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.hero-header__login:hover {
+  background-color: #f1f5f9;
+  color: #8b5cf6;
+}
+
+/* ---- Hero main ---- */
+.hero-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  min-height: calc(100vh - 4.5rem);
+  padding: 2rem 3rem 3rem;
+  background: linear-gradient(120deg, #2563eb 0%, #7c3aed 50%, #a855f7 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-main::before,
+.hero-main::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+.hero-main::before {
+  width: 60vw;
+  height: 60vw;
+  max-width: 600px;
+  max-height: 600px;
+  top: -20%;
+  inset-inline-start: -10%;
+}
+
+.hero-main::after {
+  width: 40vw;
+  height: 40vw;
+  max-width: 400px;
+  max-height: 400px;
+  bottom: -10%;
+  inset-inline-end: -5%;
+}
+
+/* Desktop: 50% width each for balanced layout */
+.hero-main__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 50%;
+  min-width: 0;
+}
+
+.hero-main__image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 988 / 962;
+  object-fit: contain;
+  display: block;
+}
+
+.hero-main__content {
+  flex: 1 1 50%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  direction: rtl;
+  text-align: right;
+  padding-right: 5rem;
+  justify-content: center;
+}
+
+.hero-main__heading-block {
+  text-align: right;
+  margin-inline-end: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-main__title {
+  margin: 0 0 0.35em;
+  font-size: clamp(3rem, 6vw, 4.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #fff;
+  letter-spacing: -0.02em;
+  transform: rotate(-2deg);
+  transform-origin: top right;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.hero-main__subtitle {
+  margin: 0;
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.hero-main__description {
+  margin: 0;
+  padding-top: 2rem;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  max-width: 100%;
+  margin-bottom: 2rem;
+}
+
+.hero-main__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.hero-main__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 200px;
+  justify-content: center;
+  outline: none;
+}
+
+.hero-main__btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+.hero-main__btn:focus,
+.hero-main__btn:focus-visible,
+.hero-main__btn:active {
+  outline: none;
+  border: none;
+}
+
+.hero-main__btn--secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.hero-main__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.hero-main__btn--secondary:active {
+  transform: translateY(0) scale(1.02);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.hero-main__btn:active {
+  transform: translateY(0) scale(1.02);
+}
+
+.hero-main__btn-icon {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Desktop: ensure layout doesn’t get too wide on large screens */
+@media (min-width: 1400px) {
+  .hero-main {
+    padding-inline: 4rem;
+  }
+}
+
+/* Tablet: scale image proportionally, prevent overflow */
+@media (max-width: 1024px) {
+  .hero-main {
+    flex-direction: column;
+    padding: 2rem 1.5rem 3rem;
+    min-height: auto;
+    overflow-x: hidden;
+  }
+
+  .hero-main__media {
+    width: 100%;
+    max-width: 100%;
+    min-height: 0;
+    flex: 0 0 auto;
+  }
+
+  .hero-main__image {
+    width: 100%;
+    max-width: 988px;
+    height: auto;
+    aspect-ratio: 988 / 962;
+  }
+
+  .hero-main__content {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .hero-main__description {
+    margin-inline: auto;
+  }
+
+  .hero-main__actions {
+    justify-content: center;
+  }
+
+  .hero-header__nav {
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-main {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .hero-main__media {
+    max-width: 100%;
+  }
+
+  .hero-main__image {
+    max-width: 100%;
+  }
+
+  .hero-header {
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .hero-header__nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .hero-header__link {
+    font-size: 0.875rem;
+  }
+}
+
+/* ---- Animations ---- */
+
+/* Fade-in animations for text elements */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-heading {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.hero-subheading {
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.hero-description {
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.hero-button {
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+/* Float animation for camera */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.camera-illustration {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Particle effects */
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  animation: particleFloat 15s linear infinite;
+  animation-delay: var(--delay);
+  width: var(--size);
+  height: var(--size);
+  bottom: -20px;
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(var(--drift-x), -100vh);
+    opacity: 0;
+  }
+}
