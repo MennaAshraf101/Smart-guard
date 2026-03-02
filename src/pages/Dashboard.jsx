@@ -5,41 +5,16 @@ import '../styles/Dashboard.css';
 import '../components/Hero/Hero.css'; 
 
 function Dashboard() {
-  const [activeButton, setActiveButton] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState(null);
-  const [selectAll, setSelectAll] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
-
-  const mockEvents = [
+  const [events, setEvents] = useState([
     { id: 1, location: "مدخل المكتبة الرئيسي", datetime: "15-01-2024, 14:32", status: "قيد الانتظار" },
     { id: 2, location: "سكن الطلاب بلوك ب", datetime: "15-01-2024, 13:15", status: "تم الحل" },
     { id: 3, location: "مختبر كلية الهندسة", datetime: "15-01-2024, 11:48", status: "تم الحل" },
     { id: 4, location: "الكافتيريا المركزية", datetime: "2024-01-14, 22:10", status: "تم الحل" },
-  ];
-
-  const filterOptions = {
-    location: [
-      { id: 'main-entrance', label: 'المدخل الرئيسي' },
-      { id: 'library', label: 'المكتبة' },
-      { id: 'labs', label: 'المختبرات' },
-      { id: 'dorms', label: 'السكن الطلابي' },
-      { id: 'cafeteria', label: 'الكافتيريا' },
-    ],
-    datetime: [
-      { id: 'today', label: 'اليوم' },
-      { id: 'yesterday', label: 'أمس' },
-      { id: 'this-week', label: 'هذا الأسبوع' },
-      { id: 'this-month', label: 'هذا الشهر' },
-      { id: 'custom', label: 'تاريخ مخصص' },
-    ],
-    status: [
-      { id: 'pending', label: 'قيد الانتظار' },
-      { id: 'resolved', label: 'تم الحل' },
-      { id: 'in-progress', label: 'قيد المعالجة' },
-      { id: 'archived', label: 'مؤرشف' },
-    ]
-  };
+  ]);
+  
+  const [activeButton, setActiveButton] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const handleQuickBtnClick = (buttonName) => {
     setActiveButton(activeButton === buttonName ? null : buttonName);
@@ -49,30 +24,32 @@ function Dashboard() {
     setSearchQuery(e.target.value);
   };
 
-  const handleFilter = (filterType) => {
-    setActiveFilter(activeFilter === filterType ? null : filterType);
+  const handleRowSelect = (id) => {
+    setSelectedRows(prev =>
+      prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id]
+    );
   };
 
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
+  const handleMarkResolved = () => {
+    setEvents(prev => prev.map(e => selectedRows.includes(e.id) ? { ...e, status: "تم الحل" } : e));
+    setSelectedRows([]);
   };
 
-  const clearFilter = () => {
-    setActiveFilter(null);
+  const handleDeleteSelected = () => {
+    setEvents(prev => prev.filter(e => !selectedRows.includes(e.id)));
+    setSelectedRows([]);
   };
 
-  const toggleDropdown = (dropdownName) => {
-    setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
-  };
-
-  const selectFilterOption = (filterType, option) => {
-    // Handle filter selection logic here
-    setOpenDropdown(null);
-  };
+  const filteredEvents = events.filter(event =>
+    !searchQuery ||
+    event.location.includes(searchQuery) ||
+    event.datetime.includes(searchQuery) ||
+    event.status.includes(searchQuery)
+  );
 
   return (
     <div className="dashboard-page">
-      {/* --- Navbar (Modified from your Hero Header) --- */}
+      {/* --- Navbar --- */}
       <header className="hero-header">
         <div className="hero-header__brand">
           <span className="hero-header__logo-icon hero-header__logo-icon--placeholder" aria-hidden />
@@ -100,20 +77,17 @@ function Dashboard() {
       
       <div className="dashboard-content">
         <h2 className="section-title">تخصيص التنبيهات الخاصة بك</h2>
+
         {/* --- Notifications Settings --- */}
         <div className="settings-card">
-            <div className="settings-card__visual">
-              {/* Bell Icon */}
-              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-              </svg>
-            </div>
+          <div className="settings-card__visual">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+          </div>
 
-          {/* Form */}
           <div className="settings-card__form">
-        
-            {/* Right: نوع الإخطار */}
             <div className="settings-group">
               <p className="settings-group__title">نوع الإخطار</p>
               <label className="checkbox-item">
@@ -126,7 +100,6 @@ function Dashboard() {
               </label>
             </div>
 
-            {/* Left: الضوابط السريعة */}
             <div className="settings-group">
               <p className="settings-group__title">الضوابط السريعة</p>
               <button 
@@ -155,10 +128,8 @@ function Dashboard() {
                 تجاهل لمدة 1 ساعة
               </button>
             </div>
-
           </div>
 
-          {/* Save Button — full width under form */}
           <div className="settings-card__footer">
             <button className="save-btn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -179,9 +150,8 @@ function Dashboard() {
               <svg width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.35-4.35" />
-                <path d="M21.5 21.5a.5.5 0 0 0 .707 0l-4.147 4.147a.5.5 0 0 0-.707-.707l4.147-4.147a.5.5 0 0 0 .707.707Z" />
               </svg>
-              يبحث
+              بحث
             </button>
             <div className="search-input-wrapper">
               <input 
@@ -193,143 +163,25 @@ function Dashboard() {
               />
             </div>
           </div>
-          
-          <div className="filter-bar">
-            <span className="filter-label">التصفية حسب:</span>
-            <div className="filter-buttons">
-              <div className="filter-dropdown">
-                <button 
-                  className={`filter-btn ${activeFilter === 'location' ? 'filter-btn--active-location' : ''}`}
-                  onClick={() => toggleDropdown('location')}
-                >
-                  <span className="filter-btn__text">موقع</span>
-                  <span className="filter-btn__icon">
-                    <svg width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 10c0 7-9 13-9 13s9-2 9-9-2-9-9-9-9 2-9 9 9-9-9 2-9 9 9z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  </span>
-                  <svg className="dropdown-arrow" width="0.75rem" height="0.75rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="6 9 12 15 18" />
-                  </svg>
-                </button>
-                
-                {openDropdown === 'location' && (
-                  <div className="dropdown-menu">
-                    {filterOptions.location.map(option => (
-                      <button
-                        key={option.id}
-                        className="dropdown-item"
-                        onClick={() => selectFilterOption('location', option)}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="filter-dropdown">
-                <button 
-                  className={`filter-btn ${activeFilter === 'datetime' ? 'filter-btn--active-datetime' : ''}`}
-                  onClick={() => toggleDropdown('datetime')}
-                >
-                  <span className="filter-btn__text">التاريخ والوقت</span>
-                  <span className="filter-btn__icon">
-                    <svg width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                      <line x1="16" y1="2" x2="16" y2="6" />
-                      <line x1="8" y1="2" x2="8" y2="6" />
-                      <line x1="3" y1="10" x2="21" y2="10" />
-                    </svg>
-                  </span>
-                  <svg className="dropdown-arrow" width="0.75rem" height="0.75rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="6 9 12 15 18" />
-                  </svg>
-                </button>
-                
-                {openDropdown === 'datetime' && (
-                  <div className="dropdown-menu">
-                    {filterOptions.datetime.map(option => (
-                      <button
-                        key={option.id}
-                        className="dropdown-item"
-                        onClick={() => selectFilterOption('datetime', option)}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="filter-dropdown">
-                <button 
-                  className={`filter-btn ${activeFilter === 'status' ? 'filter-btn--active-status' : ''}`}
-                  onClick={() => toggleDropdown('status')}
-                >
-                  <span className="filter-btn__text">حالة</span>
-                  <span className="filter-btn__icon">
-                    <svg width="1rem" height="1rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                  </span>
-                  <svg className="dropdown-arrow" width="0.75rem" height="0.75rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="6 9 12 15 18" />
-                  </svg>
-                </button>
-                
-                {openDropdown === 'status' && (
-                  <div className="dropdown-menu">
-                    {filterOptions.status.map(option => (
-                      <button
-                        key={option.id}
-                        className="dropdown-item"
-                        onClick={() => selectFilterOption('status', option)}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {activeFilter && (
-            <div className="active-filter-chip">
-              <span className="active-filter-text">
-                {activeFilter === 'location' && 'موقع'}
-                {activeFilter === 'datetime' && 'التاريخ والوقت'}
-                {activeFilter === 'status' && 'حالة'}
-              </span>
-              <button className="active-filter-clear" onClick={clearFilter}>
-                مسح ×
-              </button>
-            </div>
-          )}
 
           <table className="events-table">
             <thead>
               <tr>
-                <th>
-                  <input 
-                    type="checkbox" 
-                    checked={selectAll}
-                    onChange={handleSelectAll}
-                  />
-                </th>
-                <th>موقع</th>
+                <th></th>
+                <th>الموقع</th>
                 <th>التاريخ والوقت</th>
-                <th>حالة</th>
+                <th>الحالة</th>
               </tr>
             </thead>
             <tbody>
-              {mockEvents.map(event => (
+              {filteredEvents.length > 0 ? filteredEvents.map(event => (
                 <tr key={event.id}>
                   <td>
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      checked={selectedRows.includes(event.id)}
+                      onChange={() => handleRowSelect(event.id)}
+                    />
                   </td>
                   <td>{event.location}</td>
                   <td>{event.datetime}</td>
@@ -339,9 +191,24 @@ function Dashboard() {
                     </span>
                   </td>
                 </tr>
-              ))}
+              )) : (
+                <tr>
+                  <td colSpan="4" style={{ textAlign: 'center', color: '#94a3b8', padding: '2rem' }}>
+                    لا توجد نتائج
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
+          
+          {selectedRows.length > 0 && (
+            <div className="quick-actions">
+              <span className="quick-actions__count">مختارة: {selectedRows.length} أحداث</span>
+              <button className="qa-btn qa-btn--resolve" onClick={handleMarkResolved}>✓ تم الحل</button>
+              <button className="qa-btn qa-btn--delete" onClick={handleDeleteSelected}>🗑 حذف السجل</button>
+              <button className="qa-btn qa-btn--escalate">▲ تصعيد التنبيه</button>
+            </div>
+          )}
         </div>
       </div>
       <Footer />

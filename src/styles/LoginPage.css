@@ -390,6 +390,10 @@ body {
   overflow: hidden;
 }
 
+.submit-button:focus{
+  outline: none;
+}
+
 .submit-button::before {
   content: '';
   position: absolute;

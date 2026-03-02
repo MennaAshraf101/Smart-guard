@@ -75,6 +75,22 @@ function Hero({
             aria-hidden
           />
         </div>
+        
+        {/* Down Arrow */}
+        <button 
+          className="hero-scroll-arrow"
+          onClick={() => {
+            const featuresSection = document.getElementById('features');
+            if (featuresSection) {
+              featuresSection.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+          aria-label="Scroll to features"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
       </section>
     </div>
   );

@@ -87,7 +87,7 @@
   gap: clamp(0.875rem, 2vw, 1rem);
 }
 
-.footer__link {
+.main {
   font-size: clamp(0.875rem, 2vw, 0.9375rem);
   font-weight: 400;
   color: rgba(255, 255, 255, 0.65);

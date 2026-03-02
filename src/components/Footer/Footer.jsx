@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 function Footer() {
@@ -20,9 +21,9 @@ function Footer() {
           <div className="footer__product">
             <h3 className="footer__product-title">المنتج</h3>
             <nav className="footer__nav" aria-label="روابط المنتج">
-              <a href="#features" className="footer__link">الرئيسية</a>
-              <a href="#dashboard" className="footer__link">لوحة التحكم</a>
-              <a href="#monitoring" className="footer__link">نظام المراقبة</a>
+              <Link to="/" className="main" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>الرئيسية</Link>
+              <a href="#dashboard" className="dashboard">لوحة التحكم</a>
+              <a href="#monitoring" className="monitoring">نظام المراقبة</a>
             </nav>
           </div>
         </div>
