@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import './Footer.css';
+import logoImage from '../../assets/images/logo.png';
+import footerLogoImage from '../../assets/images/footer logo.png';
 
 function Footer() {
   return (
@@ -9,7 +11,7 @@ function Footer() {
           {/* Right Column - Brand Section */}
           <div className="footer__brand">
             <div className="footer__brand-header">
-              <div className="footer__brand-icon" aria-hidden />
+              <img src={footerLogoImage} alt="" className="footer__brand-icon" aria-hidden />
               <h2 className="footer__brand-name">حارس ذكي</h2>
             </div>
             <p className="footer__brand-description">
@@ -21,9 +23,9 @@ function Footer() {
           <div className="footer__product">
             <h3 className="footer__product-title">المنتج</h3>
             <nav className="footer__nav" aria-label="روابط المنتج">
-              <Link to="/" className="main" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>الرئيسية</Link>
-              <a href="#dashboard" className="dashboard">لوحة التحكم</a>
-              <a href="#monitoring" className="monitoring">نظام المراقبة</a>
+              <Link to="/" className="footer__link main" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>الرئيسية</Link>
+              <Link to="/Dashboard" className="footer__link dashboard">لوحة التحكم</Link>
+              <Link to="/Monitoring" className="footer__link monitoring">نظام المراقبة</Link>
             </nav>
           </div>
         </div>

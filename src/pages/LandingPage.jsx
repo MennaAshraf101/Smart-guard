@@ -9,10 +9,12 @@ import '../App.css'
  * Main landing page component
  * Contains hero, features, about, and footer sections
  */
-function LandingPage() {
+function LandingPage({ unreadCount = 0 }) {
   return (
     <>
       <Hero 
+        unreadCount={unreadCount}
+        showBell={false}
         onDiscoverFeatures={() => {
           const featuresSection = document.querySelector('.features');
           if (featuresSection) {

@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer/Footer';
 import '../styles/Dashboard.css';
-import '../components/Hero/Hero.css'; 
+import '../components/Hero/Hero.css';
+import logoImage from '../assets/images/logo.png';
 
-function Dashboard() {
-  const [events, setEvents] = useState([
-    { id: 1, location: "مدخل المكتبة الرئيسي", datetime: "15-01-2024, 14:32", status: "قيد الانتظار" },
-    { id: 2, location: "سكن الطلاب بلوك ب", datetime: "15-01-2024, 13:15", status: "تم الحل" },
-    { id: 3, location: "مختبر كلية الهندسة", datetime: "15-01-2024, 11:48", status: "تم الحل" },
-    { id: 4, location: "الكافتيريا المركزية", datetime: "2024-01-14, 22:10", status: "تم الحل" },
-  ]);
+function Dashboard({ events, setEvents, unreadCount }) {
   
   const [activeButton, setActiveButton] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRows, setSelectedRows] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleQuickBtnClick = (buttonName) => {
     setActiveButton(activeButton === buttonName ? null : buttonName);
@@ -30,6 +26,23 @@ function Dashboard() {
     );
   };
 
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+
+  const handleNotificationClick = () => {
+    setShowNotifications(false);
+    // Scroll to events table
+    const eventsTable = document.querySelector('.events-section');
+    if (eventsTable) {
+      eventsTable.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const getPendingEvents = () => {
+    return events.filter(event => event.status === 'قيد الانتظار').slice(0, 5);
+  };
+
   const handleMarkResolved = () => {
     setEvents(prev => prev.map(e => selectedRows.includes(e.id) ? { ...e, status: "تم الحل" } : e));
     setSelectedRows([]);
@@ -40,6 +53,24 @@ function Dashboard() {
     setSelectedRows([]);
   };
 
+  const handleExportLog = () => {
+    // Create log file content
+    const logContent = events.map(event => 
+      `${event.datetime} | ${event.location} | ${event.status}` 
+    ).join('\n');
+    
+    // Create blob and download
+    const blob = new Blob([logContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `events-log-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const filteredEvents = events.filter(event =>
     !searchQuery ||
     event.location.includes(searchQuery) ||
@@ -47,24 +78,78 @@ function Dashboard() {
     event.status.includes(searchQuery)
   );
 
+  // Handle hash-based scrolling for events table
+  useEffect(() => {
+    if (window.location.hash === '#events-table') {
+      const timeout = setTimeout(() => {
+        const eventsTable = document.querySelector('.events-section');
+        if (eventsTable) {
+          eventsTable.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+      
+      return () => clearTimeout(timeout);
+    }
+  }, []);
+
   return (
     <div className="dashboard-page">
       {/* --- Navbar --- */}
       <header className="hero-header">
         <div className="hero-header__brand">
-          <span className="hero-header__logo-icon hero-header__logo-icon--placeholder" aria-hidden />
+          <img src={logoImage} alt="" className="hero-header__logo-icon" aria-hidden />
           <span className="hero-header__brand-name">حارس ذكي</span>
         </div>
         <nav className="hero-header__nav">
           <Link to="/" className="hero-header__link">الرئيسية</Link>
-          <a href="#dashboard" className="hero-header__link" style={{color: '#8b5cf6'}}>لوحة التحكم</a>
-          <a href="#monitoring" className="hero-header__link">نظام المراقبة</a>
+          <Link to="/Dashboard" className="hero-header__link" style={{color: '#8b5cf6'}}>لوحة التحكم</Link>
+          <Link to="/Monitoring" className="hero-header__link">نظام المراقبة</Link>
         </nav>
         <div className="hero-header__actions">
-          <button type="button" className="hero-header__icon-btn">
-            <span className="hero-header__bell-icon" />
-            <span className="hero-header__badge" />
-          </button>
+          <div className="notification-dropdown">
+            <button 
+              type="button" 
+              className="hero-header__icon-btn" 
+              aria-label="الإشعارات"
+              onClick={toggleNotifications}
+            >
+              <span className="hero-header__bell-icon" />
+              {unreadCount > 0 && (
+                <span className="hero-header__badge" aria-label={`${unreadCount} إشعارات جديدة`}>
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+            
+            {showNotifications && unreadCount > 0 && (
+              <div className="notification-dropdown__menu">
+                <div className="notification-dropdown__header">
+                  <h4>الإشعارات الجديدة</h4>
+                  <span className="notification-dropdown__count">{unreadCount} إشعارات</span>
+                </div>
+                <div className="notification-dropdown__list">
+                  {getPendingEvents().map(event => (
+                    <button 
+                      key={event.id}
+                      className="notification-dropdown__item"
+                      onClick={handleNotificationClick}
+                    >
+                      <div className="notification-dropdown__location">{event.location}</div>
+                      <div className="notification-dropdown__time">{event.datetime}</div>
+                    </button>
+                  ))}
+                </div>
+                <div className="notification-dropdown__footer">
+                  <button 
+                    className="notification-dropdown__view-all"
+                    onClick={handleNotificationClick}
+                  >
+                    عرض جميع الإشعارات
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
           <Link to="/" className="hero-header__login">تسجيل الخروج</Link>
         </div>
       </header>
@@ -209,6 +294,17 @@ function Dashboard() {
               <button className="qa-btn qa-btn--escalate">▲ تصعيد التنبيه</button>
             </div>
           )}
+        </div>
+        
+        <div className="export-log-container">
+          <button className="export-log-btn" onClick={handleExportLog}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            حفظ ملف السجل
+          </button>
         </div>
       </div>
       <Footer />

@@ -1,32 +1,37 @@
 import { Link } from 'react-router-dom';
 import './Hero.css';
 import cameraImage from '../../assets/images/camera1.png';
+import logoImage from '../../assets/images/logo.png';
 
 function Hero({
-  logoSrc,
+  logoSrc = logoImage,
   onDiscoverFeatures,
+  unreadCount = 0,
+  showBell = true
 }) {
   return (
     <div className="hero-page" dir="rtl" lang="ar">
       <header className="hero-header">
         <div className="hero-header__brand">
-          {logoSrc ? (
-            <img src={logoSrc} alt="" className="hero-header__logo-icon" aria-hidden />
-          ) : (
-            <span className="hero-header__logo-icon hero-header__logo-icon--placeholder" aria-hidden />
-          )}
+          <img src={logoSrc} alt="" className="hero-header__logo-icon" aria-hidden />
           <span className="hero-header__brand-name">حارس ذكي</span>
         </div>
         <nav className="hero-header__nav" aria-label="الرئيسية">
           <Link to="/" className="hero-header__link">الرئيسية</Link>
-          <Link to="/dashboard" className="hero-header__link">لوحة التحكم</Link>
-          <Link to="/monitoring" className="hero-header__link">نظام المراقبة</Link>
+          <Link to="/Dashboard" className="hero-header__link">لوحة التحكم</Link>
+          <Link to="/Monitoring" className="hero-header__link">نظام المراقبة</Link>
         </nav>
         <div className="hero-header__actions">
-          <button type="button" className="hero-header__icon-btn" aria-label="الإشعارات">
-            <span className="hero-header__bell-icon" aria-hidden />
-            <span className="hero-header__badge" aria-hidden />
-          </button>
+          {showBell && (
+            <button type="button" className="hero-header__icon-btn" aria-label="الإشعارات">
+              <span className="hero-header__bell-icon" aria-hidden />
+              {unreadCount > 0 && (
+                <span className="hero-header__badge" aria-label={`${unreadCount} إشعارات جديدة`}>
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+          )}
           <Link to="/login" className="hero-header__login">تسجيل الدخول</Link>
         </div>
       </header>
